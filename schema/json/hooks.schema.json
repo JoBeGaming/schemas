@@ -2,13 +2,26 @@
     "$schema": "https://json-schema.org/draft-07/schema#",
     "$id": "https://raw.githubusercontent.com/JoBeGaming/schemas/refs/heads/main/schema/json/hooks.schema.json",
     "type": "object",
+    "properties": {
+        "$schema": {
+            "type": "string",
+            "format": "uri-reference"
+        },
+        "$id": {
+            "type": "string",
+            "format": "uri"
+        },
+        "$comment": {
+            "type": "string"
+        }
+    },
     "propertyNames": {
         "anyOf": [
             {
                 "pattern": "^\\$[a-zA-Z]+$"
             },
             {
-                "format": "uri-reference"
+                "pattern": ""
             }
         ]
     },
@@ -34,6 +47,23 @@
                     "type": "string",
                     "minLength": 1
                 }
+            },
+            "id": {
+                "type": "integer",
+                "minimum": 0
+            },
+            "active": {
+                "type": "boolean",
+                "default": true
+            },
+            "phase": {
+                "type": "string",
+                "enum": [
+                    "pre",
+                    "prep",
+                    "commit",
+                    "post"
+                ]
             }
         },
         "additionalProperties": false
