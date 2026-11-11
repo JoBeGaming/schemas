@@ -1,0 +1,100 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "$id": "https://raw.githubusercontent.com/JoBeGaming/schemas/refs/heads/main/schema/json/skip-regexes.schema.json",
+    "type": "object",
+    "properties": {
+        "$schema": {
+            "type": "string",
+            "format": "uri"
+        },
+        "$id": {
+            "type": "string",
+            "format": "uri"
+        },
+        "$comment": {
+            "type": "string"
+        }
+    },
+    "propertyNames": {
+        "anyOf": [
+            {
+                "pattern": "^\\$[a-zA-Z]+$"
+            },
+            {
+                "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$"
+            }
+        ]
+    },
+    "additionalProperties": {
+        "type": "object",
+        "properties": {
+            "regexes": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                    "$comment": "It's hard, if not impossible to make a regex to capture all possible regexes, so we don't even try it. Instead, we accept all strings.",
+                    "type": "string",
+                    "minLength": 1
+                }
+            },
+            "refs": {
+                "type": "object",
+                "propertyNames": {
+                    "pattern": "^[a-z]+$"
+                },
+                "additionalProperties": {
+                    "type": "object",
+                    "properties": {
+                        "$ref": {
+                            "type": "string",
+                            "format": "reference"
+                        },
+                        "regexes": {
+                            "$ref": "#/additionalProperties/properties/regexes"
+                        },
+                        "as": {
+                            "type": "string",
+                            "enum": [
+                                "phase",
+                                "id",
+                                "name"
+                            ]
+                        },
+                        "flags": {
+                            "$ref": "#/additionalProperties/properties/flags"
+                        }
+                    },
+                    "if": {
+                        "required": [ "$ref" ]
+                    },
+                    "then": {
+                        "not": {
+                            "anyOf": [
+                                { "required": [ "regexes" ] },
+                                { "required": [ "flags" ] }
+                            ]
+                        }
+                    },
+                    "else": {
+                        "required": [ "regexes", "flags" ],
+                        "not": {
+                            "required": [ "$ref" ]
+                        }
+                    }
+                }
+            },
+            "flags": {
+                "type": [
+                    "string",
+                    "null"
+                ],
+                "pattern": "^[AILMSXU]+$"
+            }
+        },
+        "required": [ "regexes" ],
+        "additionalProperties": false
+    },
+    "required": [
+        "entry"
+    ]
+}
