@@ -32,9 +32,8 @@
                 "type": "array",
                 "minItems": 1,
                 "items": {
-                    "$comment": "It's hard, if not impossible to make a regex to capture all possible regexes, so we don't even try it. Instead, we accept all strings.",
                     "type": "string",
-                    "minLength": 1
+                    "format": "regex"
                 }
             },
             "refs": {
